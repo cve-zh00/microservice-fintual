@@ -1,0 +1,6 @@
+uvicorn
+blacksheep
+cvxpy
+numpy
+polars
+pydantic
