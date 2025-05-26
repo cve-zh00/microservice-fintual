@@ -2,8 +2,7 @@ import numpy as np
 import polars as pl
 import cvxpy as cp
 from io import StringIO
-from typing import Union
-
+from typing import Union, Dict
 
 
 class Optimizer:
@@ -23,7 +22,7 @@ class Optimizer:
 
     def _calculate_sigma(self, df: pl.DataFrame) -> np.ndarray:
         return np.cov(df.to_numpy().T)
-        
+
     def _create_constraints(self, max_risk: float, max_weight: float) -> list:
         constraints = [
             cp.sum(self.w) == 1,
@@ -34,7 +33,7 @@ class Optimizer:
         return constraints
 
 
-    def optimize(self, max_risk: float, max_weight: float) -> dict[str, dict]:
+    def optimize(self, max_risk: float, max_weight: float) -> Dict[str, Dict]:
 
         constraints = self._create_constraints(max_risk, max_weight)
         problem = cp.Problem(self.obj, constraints)
@@ -73,6 +72,6 @@ class Portfolio:
 
         return df.drop_nulls()
 
-    def optimize(self, max_risk: float, max_weight: float) -> dict[str, dict]:
+    def optimize(self, max_risk: float, max_weight: float) -> Dict[str, Dict]:
         optimizer = Optimizer(self.df)
         return optimizer.optimize(max_risk, max_weight)
