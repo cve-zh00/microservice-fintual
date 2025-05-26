@@ -5,6 +5,7 @@ from io import StringIO
 from typing import Union
 
 
+
 class Optimizer:
     def __init__(self, df: pl.DataFrame):
         self.df = df
@@ -22,15 +23,20 @@ class Optimizer:
 
     def _calculate_sigma(self, df: pl.DataFrame) -> np.ndarray:
         return np.cov(df.to_numpy().T)
-
-    def optimize(self, max_risk: float, max_weight: float) -> dict[str, dict]:
-
+        
+    def _create_constraints(self, max_risk: float, max_weight: float) -> list:
         constraints = [
             cp.sum(self.w) == 1,
             self.w >= 0,
             self.w <= max_weight,
             self.risk <= max_risk**2
         ]
+        return constraints
+
+
+    def optimize(self, max_risk: float, max_weight: float) -> dict[str, dict]:
+
+        constraints = self._create_constraints(max_risk, max_weight)
         problem = cp.Problem(self.obj, constraints)
         problem.solve(solver=cp.SCS, warm_start=True)
 
