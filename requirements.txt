@@ -4,3 +4,5 @@ cvxpy
 numpy
 polars
 pydantic
+uvloop
+httptools

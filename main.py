@@ -1,4 +1,4 @@
-from blacksheep import Application, post,  FromForm, FromFiles
+from blacksheep import Application, post,  FromForm, FromFiles, get
 from optimizer import Portfolio
 from models import OptimizeParams
 
@@ -16,3 +16,8 @@ async def optimize_portafolio(files: FromFiles, params: FromForm[OptimizeParams]
     portfolio = Portfolio(data)
     optimize = portfolio.optimize(nivel_riesgo, peso_max)
     return  optimize
+
+
+@get("/")
+async def index():
+    return "Hello, World!"
