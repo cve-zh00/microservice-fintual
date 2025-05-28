@@ -6,6 +6,6 @@ class OptimizeParams(BaseModel):
 
     @field_validator('risk_level', 'max_weight')
     def validate_name(cls, v):
-        if v <= 0 or v >= 1:
+        if v <= 0 or v >= 100:
             raise ValueError("Value can be higher than 0 and lower than 1")
         return v
